@@ -1,7 +1,8 @@
-import Home from "../Components/Home"
-import Navbar from "../Components/Navbar"
-import Watchlist from "../Components/Watchlist"
+import Home from "./Components/Home"
+import Navbar from "./Components/Navbar"
+import Watchlist from "./Components/Watchlist"
 import {Route, Routes} from 'react-router-dom'
+import './App.css'
 
 function App() {
 
