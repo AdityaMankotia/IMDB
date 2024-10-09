@@ -3,10 +3,6 @@ import React from 'react'
 const MovieCard = (props) => {
   return (
     <>
-    <div className='text-2xl font-bold text-center m-4'>
-  <h2>Trending Movies:</h2>
-  </div>
-  
   <div className='flex justify-evenly flex-wrap gap-6'>
         <div 
         className='h-[40vh] w-[200px] 

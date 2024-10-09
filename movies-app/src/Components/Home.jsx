@@ -1,18 +1,7 @@
 import React, { useState } from 'react'
 import Pagination from './Pagination';
 import MovieCard from './MovieCard';
-
-function Banner(){
-  return (
-    <>
-    <div className='h-[20vh] md:h-[75vh] bg-center flex items-end'
-    style={{backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbpZ30UEV071asUQIUF2NKoCRQt9soNapO4g&s)`}}
-    >
-      <div className='text-white w-full text-center text-2xl'>  Iron Man</div>
-    </div>
-    </>
-  )
-}
+import Banner from './Banner';
 
 function Movies(){
   const [movies,setMovies]=useState([
