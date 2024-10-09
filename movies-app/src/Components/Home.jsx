@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import Pagination from './Pagination';
+import MovieCard from './MovieCard';
 
 function Banner(){
   return (
@@ -20,19 +22,36 @@ function Movies(){
     { title: 'Movie4' , url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO_pXvunm83Tz2UdRDYGv1TGaX8-AYqMPQ3w&s', },
     { title: 'Movie5' , url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbpZ30UEV071asUQIUF2NKoCRQt9soNapO4g&s', },
   ])
+
+  const [pageNo, setPageNo]=useState(1);
+  const handleNext = () => {
+    //increment page no
+    setPageNo(pageNo+1)
+  }
+  const handlePrev = () => {
+    //decrement page no
+    if(pageNo==1){
+      setPageNo(1);
+    }
+    else{
+      setPageNo(pageNo-1);
+      }
+  }
+
   return <>
+  <div className='text-2xl font-bold text-center m-4'>
   <h2>Trending Movies:</h2>
-  <div>
-    {movies.map((movie,key)=> {
-      return (
-        <div style={{backgroundImage: `url(${movie.url})`}}>
-          <div>
-            {movie.title}
-          </div>
-        </div>
-      )
-    })}
   </div>
+  
+  <div className='flex justify-evenly flex-wrap gap-6'>
+    {movies.map((movieObj,index)=>  <MovieCard {...movieObj} index={index} />)}
+  </div>
+
+  {/* pagination */}
+  <Pagination 
+  handleNext={handleNext} 
+  handlePrev={handlePrev} 
+  pageNo={pageNo} />
   </>
 }
 
