@@ -22,7 +22,7 @@ const Banner = () => {
         .finally( function(){
             //always executed
         })
-    }, )
+    },[] )
   return (
     <div className='h-[20vh] md:h-[75vh] bg-center flex items-end'
     style={{backgroundImage: `url(${bannerImg})`}}

@@ -1,18 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Pagination from './Pagination';
 import MovieCard from './MovieCard';
 import Banner from './Banner';
+import axios from 'axios';
 
 function Movies(){
   const [movies,setMovies]=useState([
-    { title: 'Movie1' , url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTofVOKT0DO4X-O3TZkCzhps6-YxOg06jiYaw&s', },
-    { title: 'Movie2' , url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5p6xtfkBNNe4y9k46bGgpT7_xxK7oUi5K-Q&s', },
-    { title: 'Movie3' , url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQh_G3n5hrIUB6z6Abw2Z4s-3_EZ1cHoKPfnw&s', },
-    { title: 'Movie4' , url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO_pXvunm83Tz2UdRDYGv1TGaX8-AYqMPQ3w&s', },
-    { title: 'Movie5' , url:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbpZ30UEV071asUQIUF2NKoCRQt9soNapO4g&s', },
-  ])
+   ])
 
   const [pageNo, setPageNo]=useState(1);
+
+  const [watchlist,setWatchlist] = useState([])
+
+  useEffect( ()=> {
+    axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=531303e97c2f034ac21838d9c185c8c3&language=en-US&page=${pageNo}`)
+    .then(function (response){
+        //handle success
+        setMovies(response.data.results)
+    })
+    .catch( function (error){
+        //handle error
+    })
+    .finally( function(){
+        //always executed
+    })
+},[pageNo] )
+
   const handleNext = () => {
     //increment page no
     setPageNo(pageNo+1)
@@ -27,13 +40,31 @@ function Movies(){
       }
   }
 
+  const addToWatchlist = (movieObj) => {
+    const updatedMovies= [...watchlist, movieObj]
+    setWatchlist(updatedMovies)
+  }
+
+  const removeFromWatchlist= movieObj => {
+    const filteredMovies=watchlist.filter((watchlistMovie)=> {
+      return movieObj.id !== watchlistMovie.id
+    })
+    setWatchlist(filteredMovies)
+  }
+
   return <>
   <div className='text-2xl font-bold text-center m-4'>
   <h2>Trending Movies:</h2>
   </div>
   
   <div className='flex justify-evenly flex-wrap gap-6'>
-    {movies.map((movieObj,index)=>  <MovieCard {...movieObj} index={index} />)}
+    {movies.map((movieObj,index)=>  <MovieCard 
+    movieObj={movieObj}
+    index={index} 
+    watchlist={watchlist} 
+    addToWatchlist={addToWatchlist}
+    removeFromWatchlist={removeFromWatchlist}
+    />)}
   </div>
 
   {/* pagination */}
