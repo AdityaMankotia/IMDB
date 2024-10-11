@@ -26,6 +26,14 @@ function Movies(){
     })
 },[pageNo] )
 
+useEffect( () => {
+  //on page load, set the watchlist from LS
+  const watchlistMovie=localStorage.getItem('movies')
+  if(watchlistMovie){
+    setWatchlist(JSON.parse(watchlistMovie))
+  }
+},[])
+
   const handleNext = () => {
     //increment page no
     setPageNo(pageNo+1)
@@ -43,6 +51,7 @@ function Movies(){
   const addToWatchlist = (movieObj) => {
     const updatedMovies= [...watchlist, movieObj]
     setWatchlist(updatedMovies)
+    localStorage.setItem('movies',JSON.stringify(updatedMovies))
   }
 
   const removeFromWatchlist= movieObj => {
@@ -50,6 +59,7 @@ function Movies(){
       return movieObj.id !== watchlistMovie.id
     })
     setWatchlist(filteredMovies)
+    localStorage.setItem('movies',JSON.stringify(filteredMovies))
   }
 
   return <>
@@ -78,7 +88,6 @@ function Movies(){
 const Home = () => {
   return (
     <div>
-      Home
       <Banner/>
       <Movies />
     </div>
