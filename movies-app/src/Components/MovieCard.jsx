@@ -42,9 +42,7 @@ const MovieCard = (props) => {
               😍
            </div>
             }
-             
-            
-
+                        
           <div className='text-white w-full text-center p-2
           rounded-lg bg-gray-900/50'>
             {movieObj.title}
