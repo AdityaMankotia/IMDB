@@ -25,7 +25,13 @@ const Banner = () => {
     },[] )
   return (
     <div className='h-[20vh] md:h-[75vh] bg-center flex items-end'
-    style={{backgroundImage: `url(${bannerImg})`}}
+    style={{
+      backgroundImage: bannerImg ? `url(${bannerImg})` : 'none',
+      backgroundSize: 'cover', // Ensures the image covers the div without stretching
+      backgroundPosition: 'center', // Center the image
+      backgroundRepeat: 'no-repeat', // Prevents repeating of image
+      backgroundColor: '#333', // Fallback color if no image
+    }}
     >
       <div className='text-white w-full text-center text-2xl'>{title}</div>
     </div>

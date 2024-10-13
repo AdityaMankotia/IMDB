@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import genreids from '../constants'
+
+const getGenreName =genre_id => {
+  return genreids[genre_id] || 'NA'
+}
 
 const Watchlist = () => {
   const [watchlist,setWatchlist] =useState([])
@@ -37,11 +42,11 @@ const Watchlist = () => {
               return(<tr className="hover:bg-gray-50">
               <td className="flex items-center px-6 py-4 font-normal text-gray-900">
                 <img className="h-[6rem] w-[10rem] object-fit" src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} alt={movie.title} />
-                <div className="font-medium text-gray-700 text-sm">{movie.title}s</div>
+                <div className="font-medium text-gray-700 text-sm">{movie.title}</div>
               </td>
               <td className="pl-6 py-4">{movie.vote_average}</td>
               <td className="pl-6 py-4">{movie.popularity}</td>
-              <td className="pl-2 py-4">Action</td>
+              <td className="pl-2 py-4">{getGenreName(movie.genre_ids[0])}</td>
             </tr>)
             })}
                 
