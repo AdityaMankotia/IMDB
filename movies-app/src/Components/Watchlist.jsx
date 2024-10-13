@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import genreids from '../constants'
 
+const ALL_GENRES = 'All genres';
+
 const getGenreName =genre_id => {
   return genreids[genre_id] || 'NA'
 }
+
+
 
 const Watchlist = () => {
   const [watchlist,setWatchlist] =useState([])
 
   const [searchedStr,setSearch]= useState('')
+  const [genreList,setGenreList] = useState([ALL_GENRES, 'Action', 'Animation', 'Horror'])
+  const [currGenre,setCurrGenre] = useState(ALL_GENRES)
 
   useEffect( ()=> {
     let moviesFromLs=localStorage.getItem('movies')
@@ -17,6 +23,15 @@ const Watchlist = () => {
     }
   },[])
 
+  // to set the genre filter option
+  useEffect( () => {
+    let tempArr= watchlist.map((movie)=>{
+      return getGenreName(movie.genre_ids[0])
+    })
+    //remove duplicates in array
+    let temp=new Set(tempArr)
+    setGenreList([ALL_GENRES,...temp])
+  }, [watchlist])
   const handleAscRatings =() => {
     let sortedOrder =watchlist.sort((a,b)=> a.vote_average - b.vote_average)
     setWatchlist([...sortedOrder])
@@ -39,6 +54,21 @@ const Watchlist = () => {
 
   return (
     <>
+    {/* Genres */}
+    <div className='flex justify-center m-4'>
+      {
+      genreList.map(genre => {
+        return <div className={
+          currGenre === genre 
+          ? 'flex justify-center items-center bg-blue-500 h-8 w-[300px] text-white font-bold rounded-xl mx-4 cursor-pointer'
+          : 'flex justify-center items-center bg-gray-500 h-8 w-[300px] text-white font-bold rounded-xl mx-4 cursor-pointer'
+        }
+        onClick={() => setCurrGenre(genre)}>
+          {genre}
+        </div>
+      })
+      }
+    </div>
     {/* Search Field */}
     <div className='flex justify-center my-5'>
       <input 
@@ -50,6 +80,7 @@ const Watchlist = () => {
       border border-slate-300'
       />
     </div>
+    {/* Watchlist */}
     <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
         <table className="w-full border-collapse bg-white text-left text-sm
         text-gray-500">
@@ -79,6 +110,13 @@ const Watchlist = () => {
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
             {watchlist
+            .filter(movie => {
+              if(currGenre === ALL_GENRES){
+                return true
+              } else{
+                return currGenre === getGenreName(movie.genre_ids[0])
+              }
+            })
             .filter((movie) => movie.title.toLowerCase().includes(searchedStr.toLowerCase()))
             .map((movie)=> {
               return(<tr className="hover:bg-gray-50">
