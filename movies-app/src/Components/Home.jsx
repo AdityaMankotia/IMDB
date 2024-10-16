@@ -1,16 +1,21 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect,useContext } from 'react'
 import Pagination from './Pagination';
 import MovieCard from './MovieCard';
 import Banner from './Banner';
 import axios from 'axios';
+import { WatchListContext } from '../context/WatchListContext'
+import { useSelector, useDispatch } from 'react-redux';
+import PaginationSlice from '../redux/paginationSlice';
 
+
+const paginationActions = PaginationSlice.actions;
 function Movies(){
-  const [movies,setMovies]=useState([
-   ])
+  const [movies,setMovies]=useState([])
 
-  const [pageNo, setPageNo]=useState(1);
+  const {pageNo} = useSelector( (state) => state.PaginationSlice)
+  const dispatch =useDispatch()
 
-  const [watchlist,setWatchlist] = useState([])
+  const {addToWatchlist,removeFromWatchlist,watchlist,setWatchlist} = useContext(WatchListContext)
 
   useEffect( ()=> {
     axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=531303e97c2f034ac21838d9c185c8c3&language=en-US&page=${pageNo}`)
@@ -20,6 +25,7 @@ function Movies(){
     })
     .catch( function (error){
         //handle error
+        console.log(error);
     })
     .finally( function(){
         //always executed
@@ -34,34 +40,15 @@ useEffect( () => {
   }
 },[])
 
-  const handleNext = () => {
-    //increment page no
-    setPageNo(pageNo+1)
-  }
-  const handlePrev = () => {
-    //decrement page no
-    if(pageNo==1){
-      setPageNo(1);
-    }
-    else{
-      setPageNo(pageNo-1);
-      }
-  }
+const handleNextPage = () => {
 
-  const addToWatchlist = (movieObj) => {
-    const updatedMovies= [...watchlist, movieObj]
-    setWatchlist(updatedMovies)
-    localStorage.setItem('movies',JSON.stringify(updatedMovies))
-  }
+  dispatch(paginationActions.handleNext());
 
-  const removeFromWatchlist= movieObj => {
-    const filteredMovies=watchlist.filter((watchlistMovie)=> {
-      return movieObj.id !== watchlistMovie.id
-    })
-    setWatchlist(filteredMovies)
-    localStorage.setItem('movies',JSON.stringify(filteredMovies))
-  }
+}
 
+const handlePrevious = () => {
+  dispatch(paginationActions.handlePrev());
+}
   return <>
   <div className='text-2xl font-bold text-center m-4'>
   <h2>Trending Movies:</h2>
@@ -79,8 +66,8 @@ useEffect( () => {
 
   {/* pagination */}
   <Pagination 
-  handleNext={handleNext} 
-  handlePrev={handlePrev} 
+  handleNext={handleNextPage} 
+  handlePrev={handlePrevious} 
   pageNo={pageNo} />
   </>
 }
