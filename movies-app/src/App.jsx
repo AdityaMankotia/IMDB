@@ -7,6 +7,7 @@ import WatchListContextWrapper from "./context/WatchListContext"
 import { Provider } from "react-redux"
 import store from './redux/store'
 import { Fragment } from "react"
+import ThemeToggle from "./Components/ThemeToggle"
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
     <Provider store={store}>
     <Fragment>
     <Navbar />
+    <ThemeToggle />
     <WatchListContextWrapper>
     <Routes>
       <Route path='/' element= {<Home></Home>} />
